@@ -7,6 +7,17 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     volumes:
-      - ./db/data.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./db/data.sql:/docker-entrypoint-initdb.d/data.sql:ro
     ports:
       - "5432:5432"
+  app:
+    build: .
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=postgresql+psycopg2://postgres:password@db:5432/vehicle_db
+    volumes:
+      - ./app:/app
+      - ./input.txt:/app/input.txt
+    working_dir: /app
+    command: python app.py
