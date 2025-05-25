@@ -16,6 +16,8 @@ class Matcher:
             'fuel_type': 1,
             'drive_type': 1
         }
+        # Match for partial matches for the fields mentioned in this list
+        self.partial_match_fields = ['badge']
 
     def match_descriptions(self, descriptions: List[str]) -> List[Dict]:
         """Match a list of vehicle descriptions to database entries"""
@@ -94,6 +96,15 @@ class Matcher:
             if value in description:
                 score += weight
 
+            # Special handling for partial field only
+            elif field in self.partial_match_fields:
+                # Split badge into words (e.g., "TDI580 Ultimate" -> ["tdi580", "ultimate"])
+                badge_words = set(value.split())
+                desc_words = set(description.split())
+
+                # Check if any badge word appears in description
+                if badge_words & desc_words:
+                    score += weight
         return score
 
     def _calculate_confidence(self, score: int) -> int:
