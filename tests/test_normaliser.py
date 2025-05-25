@@ -1,5 +1,8 @@
-import unittest
-from app.services.normaliser import Normaliser
+import unittest, sys, os
+
+# Add the app directory to Python path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'app'))
+from services.normaliser import Normaliser
 
 
 class TestNormaliser(unittest.TestCase):

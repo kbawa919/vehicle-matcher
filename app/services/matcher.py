@@ -90,20 +90,24 @@ class Matcher:
         """Calculate match score for a vehicle against a description"""
         score = 0
         description = description.lower()
-
         for field, weight in self.field_weights.items():
             value = getattr(vehicle, field, '').lower()
-            if value in description:
+            if field not in self.partial_match_fields and value in description:
                 score += weight
 
             # Special handling for partial field only
             elif field in self.partial_match_fields:
-                # Split badge into words (e.g., "TDI580 Ultimate" -> ["tdi580", "ultimate"])
-                badge_words = set(value.split())
+                # Split description once for efficiency
                 desc_words = set(description.split())
 
-                # Check if any badge word appears in description
-                if badge_words & desc_words:
+                # Split badge into words and check for whole word matches
+                badge_words = set(value.split())
+
+                # Check for any complete word matches (not substrings)
+                matched_words = [word for word in badge_words
+                                 if any(desc_word == word for desc_word in desc_words)]
+
+                if matched_words:
                     score += weight
         return score
 
