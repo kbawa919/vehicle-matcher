@@ -7,10 +7,13 @@ class Normaliser:
         desc = description.lower()
 
         # Remove special characters except spaces and dashes
-        desc = re.sub(r'[^a-z0-9\s-]', '', desc)
+        desc = re.sub(r'[^a-z0-9\s-]', ' ', desc)
 
         # Replace common abbreviations
         desc = self._replace_abbreviations(desc)
+
+        # Collapse multiple spaces into single space
+        desc = re.sub(r'\s+', ' ', desc).strip()
 
         return desc
 
