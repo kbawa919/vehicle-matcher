@@ -1,8 +1,22 @@
 import re
 
 class Normaliser:
+    """Text normalization service for vehicle descriptions.
+
+        Standardizes vehicle descriptions by:
+        - Converting to lowercase
+        - Removing special characters
+        - Expanding common abbreviations
+        - Normalizing whitespace
+    """
+
     def preprocess(self, description: str) -> str:
-        """Clean and tokenize the input description"""
+        """
+        Normalize and clean a vehicle description string.
+
+        :param description: Raw vehicle description string to normalize
+        :return: Cleaned and normalized description
+        """
         # Convert to lowercase
         desc = description.lower()
 
@@ -18,6 +32,12 @@ class Normaliser:
         return desc
 
     def _replace_abbreviations(self, text: str) -> str:
+        """
+        Replace common abbreviations with full terms.
+
+        :param text: Partially processed description string
+        :return: Description with abbreviations expanded
+        """
         """Replace common abbreviations with full terms"""
         # '\b \b' ensures we only match "pet" as a whole word (not "petrol")
         replacements = {
